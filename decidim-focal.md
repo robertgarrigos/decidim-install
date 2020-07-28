@@ -1,13 +1,13 @@
 ---
 layout: default
-title: Install Decidim on Ubuntu 18.04
+title: Install Decidim on Ubuntu 20.04
 nav_order: 1
 ---
 
-Install Decidim on Ubuntu 18.04
+Install Decidim on Ubuntu 20.04
 ===============================
 
-These instruction should work in any clean installation of Ubuntu 18.04. You may have to adapt some of the step in other cases.
+These instruction should work in any clean installation of Ubuntu 20.04. You may have to adapt some of the step in other cases.
 
 ## 1. Setup a clean server
 
@@ -15,30 +15,30 @@ Use a clean installation, I'm using DigitalOcean for this example, you can get a
 
 [https://m.do.co/c/b5a36733f0df](https://m.do.co/c/b5a36733f0df)
 
-Then, create a 1G droplet, choose Ubuntu 18.04:
+Then, create a 1G droplet, choose Ubuntu 20.04:
 
-![Select droplet in Digitalocean](assets/do-select.png)
+![Select droplet in Digitalocean](assets/do-select-focal.png)
 
-![Create 1G droplet in Digitalocean](assets/do-create.png)
+![Create 1G droplet in Digitalocean](assets/do-create-focal.png)
 
 > Once you've created the droplet, you will need a domain name, let's say you bought `my-decidim.org`, you'll need to point an **A** record in your DNS provider to the droplet public IP.
 
 Then I'll recommend you to follow the guide from digitalocean in order to create a non-root user and secure your server (this is valid in other providers too):
 
 Follow these instructions using `decidim` instead of `sammy` as a user:
-https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-18-04
+https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-20-04
 
 After that, I'd recommend to add some swap memory in your server (this is not necessary if you create a bigger memory droplet). For low-memory droplets it seems to work better with swap.
 
 To do that follow this tutorial as well:
 
-https://www.digitalocean.com/community/tutorials/how-to-add-swap-space-on-ubuntu-18-04
+https://www.digitalocean.com/community/tutorials/how-to-add-swap-space-on-ubuntu-20-04
 
 From now on, I'll assume you have created a non-root user (with sudo capabilities) named `decidim` (but use whatever you want) and you are logged into your machine, so you will see a bash prompt similar to this:
 
 ```bash
 ssh decidim@my-decidim.org
-Welcome to Ubuntu 18.04 LTS (GNU/Linux 4.15.0-23-generic x86_64)
+Welcome to Ubuntu 20.04 LTS (GNU/Linux 4.15.0-23-generic x86_64)
 
  * Documentation:  https://help.ubuntu.com
  * Management:     https://landscape.canonical.com
@@ -132,12 +132,13 @@ At this point, you should be able to run the command `rbenv install -l` that wil
 ```bash
 decidim@decidim:~$ rbenv install -l
 Available versions:
-  1.8.5-p52
-  1.8.5-p113
-...
-  topaz-dev
-  truffleruby-1.0.0-rc2
-  truffleruby-1.0.0-rc3
+  2.5.8
+  2.6.6
+  2.7.1
+  ...
+  rbx-5.0
+  truffleruby-20.1.0
+  truffleruby+graalvm-20.1.0
 ```
 
 We are going to use version 2.6.3, so run these commands:
@@ -179,7 +180,7 @@ Decidim uses Postgresql as a SQL database, we are going to install it in this ma
 sudo apt install -y postgresql libpq-dev
 ```
 
-We also need NodeJS as a dependency for the decidim generator, in ubuntu 18.04 it's fine to install from the repositories (we also install imageMagick and a library needed since version 0.17, used by Decidim):
+We also need NodeJS as a dependency for the decidim generator, in ubuntu 20.04 it's fine to install from the repositories (we also install imageMagick and a library needed since version 0.17, used by Decidim):
 
 ```bash
 sudo apt install -y nodejs imagemagick libicu-dev
@@ -405,13 +406,13 @@ The last 2 commands are to allow the firewall (if we have it activated) let pass
 
 Nginx is a very fast and efficient web server but it doesn't handle Ruby applications by itself. We need and intermediary gateway for that, we will use [Passenger](https://www.phusionpassenger.com/library/walkthroughs/deploy/ruby/ownserver/nginx/oss/bionic/install_passenger.html).
 
-I'll summarize here all the commands to [install Passenger in Ubuntu 18.04](https://www.phusionpassenger.com/library/walkthroughs/deploy/ruby/ownserver/nginx/oss/bionic/install_passenger.html) (follow the link to get into details):
+I'll summarize here all the commands to [install Passenger in Ubuntu 20.04](https://www.phusionpassenger.com/library/walkthroughs/deploy/ruby/ownserver/nginx/oss/bionic/install_passenger.html) (follow the link to get into details):
 
 ```bash
 sudo apt install -y dirmngr gnupg
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 561F9B9CAC40B2F7
 sudo apt install -y apt-transport-https ca-certificates
-sudo sh -c 'echo deb https://oss-binaries.phusionpassenger.com/apt/passenger bionic main > /etc/apt/sources.list.d/passenger.list'
+sudo sh -c 'echo deb https://oss-binaries.phusionpassenger.com/apt/passenger focal main > /etc/apt/sources.list.d/passenger.list'
 sudo apt update
 sudo apt install -y libnginx-mod-http-passenger
 ```
